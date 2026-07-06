@@ -1,3 +1,5 @@
+#  Default Python .gitignore file 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.streamlit/
+
+# Bases de datos vectoriales locales (RAG)
+faiss_index/
+chroma_db/
