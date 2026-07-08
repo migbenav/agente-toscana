@@ -16,8 +16,14 @@ Para mantener un registro ordenado y limpio del proceso de desarrollo, la bitác
 
 ---
 
-## 🛠️ Tecnologías 
-- **Lenguaje:** Python
-- **Orquestación:** LangChain
-- **Interfaz:** Streamlit
-- **Base de Datos Vectorial:** FAISS (Local)
+## 🛠️ Tecnologías y Arquitectura
+
+El backend del sistema está diseñado bajo principios de desacoplamiento y alta cohesión, permitiendo el intercambio de componentes mediante inyección de dependencias.
+
+* **Lenguaje:** Python 3.14+
+* **Orquestación RAG:** LangChain (Core, Text Splitters y Community)
+* **Procesamiento de Texto:** `MarkdownHeaderTextSplitter` (preservación de jerarquía legal peruana) combinado con `RecursiveCharacterTextSplitter`.
+* **Modelos de Embeddings:** `HuggingFaceEmbeddings` utilizando el modelo multilingüe local `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (optimizado para CPU y libre de restricciones de API Rate Limits).
+* **Base de Datos Vectorial:** FAISS (Indexación y persistencia local en disco).
+* **Generación de Respuestas (LLM):** Google Gemini (vía `langchain-google-genai`).
+* **Interfaz de Usuario:** Streamlit (Despliegue futuro en Streamlit Community Cloud).
