@@ -7,6 +7,11 @@ faiss-cpu
 python-dotenv
 markdown
 
+pypdf
+
 # Conectores de LangChain para múltiples LLMs
 langchain-google-genai      # Para usar los últimos modelos de Gemini (ej. Gemini 2.5 Flash o superiores)
 langchain-groq              # ¡Altamente recomendado! Te da acceso gratuito y ultra rápido a Llama 3 (8B y 70B)
+langchain-huggingface 
+
+sentence-transformers
