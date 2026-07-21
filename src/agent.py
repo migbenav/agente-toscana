@@ -38,6 +38,27 @@ class LegalRAGAgent:
             max_retries=2,
         )
 
+    def get_system_info(self) -> dict:
+        """
+        Devuelve información del backend utilizada por la interfaz.
+        """
+        llm_name = "Desconocido"
+        if hasattr(self.llm, "model"):
+            llm_name = self.llm.model
+        elif hasattr(self.llm, "model_name"):
+            llm_name = self.llm.model_name
+        embedding_name = "No cargado"
+        if self.embeddings is not None:
+            embedding_name = self.embeddings.model_name if hasattr(
+                self.embeddings,
+                "model_name",
+            ) else "BAAI/bge-m3"
+        return {
+            "llm": llm_name,
+            "embeddings": embedding_name,
+            "vector_store": "FAISS",
+        }
+
     def _initialize_embeddings(self) -> None:
         """
         Carga el modelo local de embeddings en la memoria RAM usando la CPU.
@@ -81,55 +102,105 @@ class LegalRAGAgent:
 
         self.prompt = PromptTemplate.from_template(template_content)
 
+    def _format_documents(self, documents) -> str:
+        """
+        Convierte los documentos recuperados por FAISS en un único bloque
+        de contexto para el LLM.
+        """
+        formatted_docs = []
+
+        for doc in documents:
+            metadata = doc.metadata or {}
+            header = []
+            if metadata.get("Title"):
+                header.append(metadata["Title"])
+            if metadata.get("Chapter"):
+                header.append(metadata["Chapter"])
+            if metadata.get("Section"):
+                header.append(metadata["Section"])
+            if metadata.get("Article"):
+                header.append(metadata["Article"])
+
+            prefix = " | ".join(header)
+
+            if prefix:
+                formatted_docs.append(
+                    f"{prefix}\n{doc.page_content}"
+                )
+            else:
+                formatted_docs.append(doc.page_content)
+
+        return "\n\n-----------------------------\n\n".join(formatted_docs)
+
     def setup_rag_chain(self) -> None:
         """
-        Inicializa de forma secuencial la infraestructura y ensambla la cadena LCEL.
+        Inicializa la infraestructura del agente.
         """
         print("Iniciando configuracion del agente RAG...")
+
         self._initialize_embeddings()
         self._load_vector_store()
         self._load_prompt_template()
 
-        # Validacion estricta para asegurar que los componentes no sean None (elimina alertas del editor)
         if not self.vector_store or not self.prompt or not self.llm:
-            raise ValueError("Los componentes del agente no se inicializaron correctamente.")
-        
-        # Configura el recuperador para extraer los 10 fragmentos mas similares
-        retriever = self.vector_store.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": 10})
+            raise ValueError(
+                "Los componentes del agente no se inicializaron correctamente."
+            )
 
-        # Construccion de la cadena lineal usando operadores Pipe de LCEL
-        self.rag_chain = (
-            {
-                "context": retriever,
-                "question": RunnablePassthrough(),
-            }
-            | self.prompt
-            | self.llm
-            | StrOutputParser()
-        )
         print("Agente RAG configurado y listo para recibir consultas.")
 
     def answer_question(self, question: str) -> str:
         """
-        Invoca la cadena para resolver la duda del usuario y gestiona fallos de ejecucion.
+        Ejecuta una búsqueda RAG y devuelve la respuesta junto con
+        las fuentes consultadas.
         """
-        if not self.rag_chain:
-            raise RuntimeError(
-                "La cadena RAG no ha sido configurada. Llame a setup_rag_chain() antes de realizar consultas."
+        try:
+            retriever = self.vector_store.as_retriever(
+                search_type="similarity",
+                search_kwargs={"k": 10},
             )
 
-        try:
-            # Ejecucion sincrona del pipeline de datos
-            response = self.rag_chain.invoke(question)
-            return response
+            retrieved_docs = retriever.invoke(question)
+            context = self._format_documents(retrieved_docs)
+            prompt = self.prompt.format(
+                context=context,
+                question=question,
+            )
+
+            response = self.llm.invoke(prompt)
+            if hasattr(response, "content"):
+                answer = response.content
+            else:
+                answer = str(response)
+
+            ###################################################################
+            # Construcción de las fuentes
+            ###################################################################
+
+            sources = []
+
+            for doc in retrieved_docs:
+                metadata = doc.metadata or {}
+                title = (
+                    metadata.get("Title")
+                    or metadata.get("source")
+                )
+
+                if title and title not in sources:
+                    sources.append(title)
+
+            if sources:
+                answer += "\n\n---\n\n### 📚 Fuentes consultadas\n"
+                for source in sources:
+                    answer += f"\n- {source}"
+
+            return answer
+
         except Exception as error:
-            error_message = f"Error critico durante el procesamiento de la consulta: {str(error)}"
-            print(error_message)
+            print(error)
+            traceback.print_exc()
             return (
-                "Lo sentimos, ocurrio un problema al conectar con el motor de Inteligencia Artificial. "
-                "Por favor, intente de nuevo en unos momentos."
+                "Lo sentimos, ocurrió un problema al procesar la consulta."
             )
 
 

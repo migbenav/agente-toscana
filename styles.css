@@ -1,0 +1,205 @@
+/* ==========================================================
+   ESTILOS PERSONALIZADOS
+   ----------------------------------------------------------
+   Diseño limpio y moderno para la aplicación Streamlit.
+   ========================================================== */
+
+
+/*------------------------------------------------------------
+  Contenedor principal
+------------------------------------------------------------*/
+.block-container{
+    max-width:900px;
+    padding-top:2rem;
+    padding-bottom:2rem;
+}
+
+/*------------------------------------------------------------
+  Título principal
+------------------------------------------------------------*/
+h1{
+    text-align:center;
+    font-weight:700;
+    margin-bottom:.25rem;
+}
+
+/*------------------------------------------------------------
+  Subtítulo (caption)
+------------------------------------------------------------*/
+.main-subtitle{
+    text-align:center;
+    color:#808080;
+    font-size:.95rem;
+    margin-bottom:1.75rem;
+}
+
+/*------------------------------------------------------------
+  Espaciado general entre bloques
+------------------------------------------------------------*/
+.element-container{
+    margin-bottom:.25rem;
+}
+
+/*------------------------------------------------------------
+  Sidebar
+------------------------------------------------------------*/
+[data-testid="stSidebar"]{
+    padding-top:1rem;
+}
+
+/*------------------------------------------------------------
+  Títulos del sidebar
+------------------------------------------------------------*/
+.sidebar-title{
+    font-size:.95rem;
+    font-weight:600;
+    margin-bottom:.75rem;
+}
+
+/*------------------------------------------------------------
+  Lista de documentos
+  Se utiliza una fuente ligeramente más pequeña para que
+  documentos largos no ocupen demasiado espacio.
+------------------------------------------------------------*/
+.document-item{
+    font-size:.82rem;
+    line-height:1.35;
+    padding:.15rem 0;
+    color:#5f6368;
+    word-break:break-word;
+}
+
+/*------------------------------------------------------------
+  Separación entre grupos del sidebar
+------------------------------------------------------------*/
+.sidebar-section{
+    margin-top:1.2rem;
+    margin-bottom:1.2rem;
+}
+
+/*------------------------------------------------------------
+  Preguntas sugeridas
+  El botón ocupa todo el ancho y tiene una altura uniforme.
+------------------------------------------------------------*/
+.question-button button{
+    width:100%;
+    min-height:62px;
+    white-space:normal;
+    text-align:left;
+    padding:14px;
+    font-weight:500;
+    border-radius:10px;
+    transition:all .18s ease;
+}
+
+/*------------------------------------------------------------
+  Efecto hover de las preguntas
+------------------------------------------------------------*/
+.question-button button:hover{
+    transform:translateY(-1px);
+}
+
+/*------------------------------------------------------------
+  Chat
+  Reduce ligeramente el espacio vertical entre mensajes.
+------------------------------------------------------------*/
+.stChatMessage{
+    padding-top:.70rem;
+    padding-bottom:.70rem;
+}
+
+/*------------------------------------------------------------
+  Caja del chat
+  Mantiene un ancho agradable para leer respuestas largas.
+------------------------------------------------------------*/
+[data-testid="stChatMessageContent"]{
+    line-height:1.65;
+}
+
+/*------------------------------------------------------------
+  Input inferior
+------------------------------------------------------------*/
+[data-testid="stChatInput"]{
+    margin-top:1rem;
+}
+
+/*------------------------------------------------------------
+  Spinner
+------------------------------------------------------------*/
+[data-testid="stSpinner"]{
+    padding-top:.50rem;
+    padding-bottom:.50rem;
+}
+
+/*------------------------------------------------------------
+  Expander
+  Se utiliza para la lista de documentos.
+------------------------------------------------------------*/
+.streamlit-expanderHeader{
+    font-weight:600;
+}
+
+/*------------------------------------------------------------
+  Divisores
+  Hace que no ocupen demasiado espacio visual.
+------------------------------------------------------------*/
+hr{
+    margin-top:1rem;
+    margin-bottom:1rem;
+}
+
+/*------------------------------------------------------------
+  Botón "Limpiar conversación"
+  Mantiene un pequeño margen superior.
+------------------------------------------------------------*/
+.stButton{
+    margin-top:.35rem;
+}
+
+/*------------------------------------------------------------
+  Tablas Markdown
+  Si el LLM responde con tablas se ven mejor.
+------------------------------------------------------------*/
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th{
+    text-align:left;
+    font-weight:600;
+}
+th,
+td{
+    padding:8px;
+}
+
+/*------------------------------------------------------------
+  Bloque de fuentes consultadas
+------------------------------------------------------------*/
+.sources-box{
+    margin-top:18px;
+    padding-top:10px;
+    border-top:1px solid rgba(128,128,128,.30);
+    font-size:.90rem;
+}
+
+.sources-title{
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.sources-item{
+    margin-bottom:4px;
+}
+
+/*------------------------------------------------------------
+  Responsive
+  En pantallas pequeñas aumenta ligeramente el ancho útil.
+------------------------------------------------------------*/
+@media (max-width:900px){
+    .block-container{
+        max-width:100%;
+        padding-left:1rem;
+        padding-right:1rem;
+    }
+}
