@@ -1,4 +1,5 @@
 import os
+import traceback
 from typing import Any
 from langchain_community.vectorstores import FAISS
 from langchain_core.output_parsers import StrOutputParser
@@ -43,8 +44,9 @@ class LegalRAGAgent:
         """
         print("Cargando modelo local de embeddings en memoria...")
         self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+            model_name="BAAI/bge-m3",
             model_kwargs={"device": "cpu"},
+            encode_kwargs={"normalize_embeddings": True},
         )
 
     def _load_vector_store(self) -> None:
@@ -92,10 +94,10 @@ class LegalRAGAgent:
         if not self.vector_store or not self.prompt or not self.llm:
             raise ValueError("Los componentes del agente no se inicializaron correctamente.")
         
-        # Configura el recuperador para extraer los 3 fragmentos mas similares
+        # Configura el recuperador para extraer los 10 fragmentos mas similares
         retriever = self.vector_store.as_retriever(
             search_type="similarity",
-            search_kwargs={"k": 4})
+            search_kwargs={"k": 10})
 
         # Construccion de la cadena lineal usando operadores Pipe de LCEL
         self.rag_chain = (
@@ -134,6 +136,7 @@ class LegalRAGAgent:
 # Bloque de verificacion tecnica y pruebas multi-modelo
 if __name__ == "__main__":
     import sys
+    import traceback
     from dotenv import load_dotenv
     
     load_dotenv()
@@ -142,7 +145,7 @@ if __name__ == "__main__":
     try:
         agent.setup_rag_chain()
         
-        test_query = "¿Cuanto es la mora si no pago el recibo de mantenimiento?"
+        test_query = "Artículo 15 Convocatoria y Quórum?"
         print(f"\n==========================================")
         print(f"CONSULTA DE PRUEBA: {test_query}")
         print(f"==========================================\n")
@@ -150,7 +153,7 @@ if __name__ == "__main__":
         # --- BLOQUE DE DEPURACIÓN LOCAL (NUESTRO PROPIO LANGSMITH) ---
         print("--- [FAISS RETRIEVAL INSPECTOR] ---")
         # Forzamos la extracción manual de los fragmentos que FAISS encuentra
-        retriever = agent.vector_store.as_retriever(search_kwargs={"k": 4})
+        retriever = agent.vector_store.as_retriever(search_kwargs={"k": 10})
         retrieved_docs = retriever.invoke(test_query)
         
         for index, doc in enumerate(retrieved_docs, 1):
@@ -168,4 +171,5 @@ if __name__ == "__main__":
         print(f"\n================ RESPUESTA DEL LLM ================\n{answer}")
         
     except Exception as e:
-        print(f"La inicializacion fallo: {e}")
+        print("\n===== ERROR =====")
+        traceback.print_exc()

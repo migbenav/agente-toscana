@@ -140,7 +140,11 @@ if __name__ == "__main__":
     
     # Inicializacion de los componentes especificos (Google GenAI y FAISS)
     default_embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        #model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        model_name="BAAI/bge-m3",
+        model_kwargs={"device": "cpu"},
+        encode_kwargs={"normalize_embeddings": True},
+    )
     
     # Construccion de la base de conocimiento inyectando las herramientas seleccionadas
     builder = KnowledgeBaseBuilder(
