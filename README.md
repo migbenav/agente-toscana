@@ -51,7 +51,7 @@ Las fuentes documentales pueden ampliarse incorporando nuevos documentos en form
 # 🧠 Arquitectura del Sistema
 
 Flujo general:
-
+```
 Documentos legales
 |
 v
@@ -74,7 +74,7 @@ LLM
 |
 v
 Respuesta generada
-
+```
 Los documentos legales pasan por un proceso de limpieza, estructuración e indexación antes de incorporarse a la base vectorial. Este procesamiento se realiza una única vez y permite optimizar la recuperación semántica durante las consultas.
 Para una explicación detallada:
 
@@ -83,7 +83,7 @@ Para una explicación detallada:
 ---
 
 ## 🛠️ Tecnologías utilizadas
-
+```
 | Componente | Tecnología |
 |------------|------------|
 | Lenguaje | Python |
@@ -94,14 +94,15 @@ Para una explicación detallada:
 | Base vectorial | FAISS |
 | Procesamiento documental | Markdown Header Splitter + Recursive Character Splitter |
 | Gestión de configuración | python-dotenv |
-
+```
 Para conocer el detalle de la implementación:
 
-➡️ Ver [Pipeline RAG](docs/rag_pipeline.md)
+➡️ Ver [Procesamiento](docs/document_processing.md)
 
 ---
 
 ## 📂 Estructura del proyecto
+```
 ├── app.py                     # Interfaz web desarrollada con Streamlit
 ├── src/
 │   ├── agent.py               # Implementación del agente RAG
@@ -115,7 +116,7 @@ Para conocer el detalle de la implementación:
 ├── requirements.txt           # Dependencias de Python
 ├── .env.example               # Ejemplo de variables de entorno
 └── README.md                  # Presentación general del proyecto
-
+```
 ---
 
 ## 📚 Documentación
@@ -125,7 +126,7 @@ La documentación técnica se encuentra organizada por temas para mantener este 
 | Documento | Descripción |
 |-----------|-------------|
 | [architecture.md](docs/architecture.md) | Arquitectura general y componentes del sistema. |
-| [rag_pipeline.md](docs/rag_pipeline.md) | Flujo completo del procesamiento documental y la arquitectura RAG. |
+| [document_processing.md](docs/document_processing.md) | Flujo completo del procesamiento documental y la arquitectura RAG. |
 | [setup.md](docs/setup.md) | Instalación, configuración y ejecución del proyecto. |
 | [decisions.md](docs/decisions.md) | Principales decisiones técnicas y criterios de diseño adoptados. |
 | [experiments.md](docs/experiments.md) | Registro de experimentos realizados y líneas de investigación futuras. |

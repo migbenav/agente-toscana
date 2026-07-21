@@ -95,7 +95,7 @@ Su función es transformar documentos PDF en archivos Markdown estructurados med
 
 Este procesamiento se realiza una única vez antes de la indexación.
 
-El detalle del proceso puede consultarse en [rag_pipeline.md](rag_pipeline.md).
+El detalle del proceso puede consultarse en [document_processing.md](document_processing.md).
 
 ---
 
@@ -148,7 +148,7 @@ Durante el desarrollo se priorizaron los siguientes criterios:
 
 ---
 
-Para conocer con mayor detalle el procesamiento documental y la construcción del índice vectorial, consulte el documento [Pipeline RAG](rag_pipeline.md).
+Para conocer con mayor detalle el procesamiento documental y la construcción del índice vectorial, consulte el documento [document_processing.md](document_processing.md).
 
 ---
 
