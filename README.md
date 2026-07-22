@@ -119,6 +119,22 @@ Para conocer el detalle de la implementación:
 ```
 ---
 
+## 💬 Ejemplos de consultas
+
+El asistente permite realizar consultas en lenguaje natural sobre la normativa de Propiedad Horizontal en el Perú.
+
+| Consulta | Tema |
+|----------|------|
+| ¿Cómo se convoca una junta de propietarios? | Convocatorias |
+| ¿Qué mayoría se requiere para modificar el Reglamento Interno? | Acuerdos |
+| ¿Quién puede representar a un propietario en una asamblea? | Representación |
+| ¿Qué funciones tiene el presidente de la Junta de Propietarios? | Órganos de gobierno |
+| ¿Qué obligaciones establece la Ley de Protección de Datos Personales para una Junta de Propietarios? | Protección de datos |
+
+📄 Ver respuestas de ejemplo en **[docs/examples.md](docs/examples.md)**.
+
+---
+
 ## 📚 Documentación
 
 La documentación técnica se encuentra organizada por temas para mantener este README como una vista general del proyecto.
