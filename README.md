@@ -147,6 +147,7 @@ La documentación técnica se encuentra organizada por temas para mantener este 
 | [decisions.md](docs/decisions.md) | Principales decisiones técnicas y criterios de diseño adoptados. |
 | [experiments.md](docs/experiments.md) | Registro de experimentos realizados y líneas de investigación futuras. |
 | [troubleshooting.md](docs/troubleshooting.md) | Problemas encontrados durante el desarrollo y sus soluciones. |
+| [examples.md](docs/examples.md) | Modelo de preguntas y respuestas. |
 
 ---
 
