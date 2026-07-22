@@ -116,9 +116,7 @@ def render_system_info(agent: LegalRAGAgent) -> None:
         <strong>Tecnología</strong><br>
         {system["llm"]}<br>
         {system["embeddings"]}<br>
-        {system["vector_store"]}<br><br>
-        <strong>Base documental</strong><br>
-        {document_count} documento(s)
+        {system["vector_store"]}<br>
         </div>
         """,
         unsafe_allow_html=True,
@@ -168,12 +166,25 @@ def render_chat_history() -> None:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
+            if message["role"] == "assistant" and message.get("sources"):
+                with st.expander(
+                    f"Fuentes consultadas ({len(message['sources'])})",
+                    expanded=False,
+                ):
+                    for source in message["sources"]:
+                        st.markdown(
+                            f'<div class="source-item">{source}</div>',
+                            unsafe_allow_html=True,
+                        )
+
 # ============================================================
 # Procesamiento
 # ============================================================
 
 def process_question(agent: LegalRAGAgent, question: str) -> None:
-    """Envía la consulta al agente y muestra la respuesta."""
+    """
+    Envía la consulta al agente y muestra la respuesta.
+    """
     st.session_state.messages.append(
         {
             "role": "user",
@@ -185,11 +196,35 @@ def process_question(agent: LegalRAGAgent, question: str) -> None:
     with st.chat_message("assistant"):
         with st.spinner("Analizando la normativa..."):
             response = agent.answer_question(question)
-            st.markdown(response)
+        answer = response
+        sources = []
+        separator = "\n\n---\n\n### 📚 Fuentes consultadas"
+        if separator in response:
+            answer, sources_text = response.split(
+                separator,
+                maxsplit=1,
+            )
+            sources = [
+                line.replace("-", "").strip()
+                for line in sources_text.splitlines()
+                if line.strip().startswith("-")
+            ]
+        st.markdown(answer)
+        if sources:
+            with st.expander(
+                f"Fuentes consultadas ({len(sources)})",
+                expanded=False,
+            ):
+                for source in sources:
+                    st.markdown(
+                        f'<div class="source-item">{source}</div>',
+                        unsafe_allow_html=True,
+                    )
     st.session_state.messages.append(
         {
             "role": "assistant",
-            "content": response,
+            "content": answer,
+            "sources": sources,
         }
     )
 
@@ -199,7 +234,6 @@ def handle_user_input(agent: LegalRAGAgent) -> None:
     if question:
         st.session_state.selected_question = None
         process_question(agent, question)
-        return
     question = st.chat_input("Realice una consulta sobre propiedad horizontal...")
     if question:
         process_question(agent, question)
