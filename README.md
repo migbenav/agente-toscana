@@ -53,26 +53,26 @@ Las fuentes documentales pueden ampliarse incorporando nuevos documentos en form
 Flujo general:
 ```
 Documentos legales
-|
-v
+ │
+ ▼
 Procesamiento documental
-|
-v
+ │
+ ▼
 Embeddings
-|
-v
+ │
+ ▼
 FAISS Vector Store
-|
-v
+ │
+ ▼
 Consulta del usuario
-|
-v
+ │
+ ▼
 Recuperación de contexto
-|
-v
+ │
+ ▼
 LLM
-|
-v
+ │
+ ▼
 Respuesta generada
 ```
 Los documentos legales pasan por un proceso de limpieza, estructuración e indexación antes de incorporarse a la base vectorial. Este procesamiento se realiza una única vez y permite optimizar la recuperación semántica durante las consultas.
@@ -83,7 +83,7 @@ Para una explicación detallada:
 ---
 
 ## 🛠️ Tecnologías utilizadas
-```
+
 | Componente | Tecnología |
 |------------|------------|
 | Lenguaje | Python |
@@ -94,7 +94,7 @@ Para una explicación detallada:
 | Base vectorial | FAISS |
 | Procesamiento documental | Markdown Header Splitter + Recursive Character Splitter |
 | Gestión de configuración | python-dotenv |
-```
+
 Para conocer el detalle de la implementación:
 
 ➡️ Ver [Procesamiento](docs/document_processing.md)
